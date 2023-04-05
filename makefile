@@ -3,10 +3,12 @@ CXXFLAGS ?= -std=c++17 -Wall -Weffc++ -Wextra -Wsign-conversion -Werror -pedanti
 INCLUDES ?= -Iinclude
 
 EXE = $(BINDIR)/main
+TEST = $(BINDIR)/test
 OBJS = $(addprefix $(OBJDIR)/, main.o greeting.o)
 
 BINDIR = bin
 SRCDIR = src
+TSTDIR = tests
 OBJDIR = $(SRCDIR)/obj
 
 $(EXE): $(OBJS)
@@ -15,7 +17,11 @@ $(EXE): $(OBJS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) -c $(INCLUDES) $(CXXFLAGS) -o $@ $^
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) -o $@ $^
+
+test: $(filter-out $(OBJDIR)/main.o, $(OBJS))
+	@mkdir -p $(BINDIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TSTDIR)/test_main.cpp $^ -o $(TEST)
 
 clean:
 	rm -rf $(BINDIR) $(OBJDIR)
