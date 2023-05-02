@@ -1,8 +1,8 @@
 CXX := clang++
-CXXFLAGS ?= -std=c++17 -Wall -Weffc++ -Wextra -Wsign-conversion -Werror -pedantic-errors
+CXXFLAGS ?= -std=c++20 -Wall -Weffc++ -Wextra -Wsign-conversion -pedantic-errors
 INCLUDES ?= -Iinclude
 
-EXE = $(BINDIR)/main
+EXE = $(BINDIR)/prog
 TEST = $(BINDIR)/test
 OBJS = $(addprefix $(OBJDIR)/, main.o greeting.o)
 
@@ -21,9 +21,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 
 test: $(filter-out $(OBJDIR)/main.o, $(OBJS))
 	@mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TSTDIR)/test_main.cpp $^ -o $(TEST)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(wildcard $(TSTDIR)/*.cpp) $^ -o $(TEST)
 
 clean:
-	rm -rf $(BINDIR) $(OBJDIR)
+	@rm -rf $(BINDIR) $(OBJDIR)
 
 .PHONY: clean
